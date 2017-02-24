@@ -120,4 +120,19 @@ add_definitions("-std=gnu99")
 
 #Still FE
 
-# Add AVR Executable
+#include search paths
+#include_directories({$AVR-EXAMPLE_SOURCE_DIR}/mylib)
+
+#building library and application in their subdirectories
+#add_subdirectory(mylib)
+add_subdirectory(src)
+
+#testing functions w/o source files - gets FATAL_ERROR
+# add_avr_executable(test_breaks_generation)
+# add_avr_library(mytestlib_breaks_generation)
+
+# still FE
+
+# use default documentation target
+set(DOXYGEN_CONF_IN "doxygen.conf")
+include("${PROJECT_SOURCE_DIR}/../Modules/defaultDocuTarget.cmake")
