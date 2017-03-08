@@ -44,6 +44,6 @@ function(add_avr_executable EXECUTABLE_NAME)
     set_target_properties(
         ${elf_file}
         PROPERTIES
-            COMPILE_FLAGS "-mcu=${AVR_MCU}"
-            LINK_FLAGS "-mmcu=${AVR_MCU} -Wl, --gc-sections -mrelax -Wl, -Map, ${map_file}"
+            COMPILE_FLAGS "-mcu=${AVR_MCU}, -m32"
+            LINK_FLAGS "-mmcu=${AVR_MCU} -Wl, -m32, --gc-sections -mrelax -Wl, -Map, ${map_file}"
     )
