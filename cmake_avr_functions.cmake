@@ -47,3 +47,101 @@ function(add_avr_executable EXECUTABLE_NAME)
             COMPILE_FLAGS "-mcu=${AVR_MCU}, -m32"
             LINK_FLAGS "-mmcu=${AVR_MCU} -Wl, -m32, --gc-sections -mrelax -Wl, -Map, ${map_file}"
     )
+
+    add_custom_command(
+        OUTPUT ${hex_file}
+        COMMAND
+            ${AVR_OBJCOPY} -j .text -j .data ihex ${elf_file} ${hex_file}
+        COMMAND
+            ${AVR_SIZE_TOOL} ${AVR_SIZE_ARGS} ${elf_file}
+        DEPENDS ${elf_file}
+    )
+
+    # eeprom
+    add_custom_command(
+        OUTPUT ${eeprom_image}
+        COMMAND
+        ${AVR_OBJCOPY} -j .eeprom --set-section-flags=.eeprom=alloc,load
+                       -O ihex ${elf_file} ${eeprom_image}
+        DEPENDS ${elf_file}
+    )
+
+    add_custom_target(
+        ${EXECUTABLE_NAME}
+        ALL
+        DEPENDS ${hex_file} ${eeprom_image}
+    )
+
+    set_target_properties(
+        ${EXECUTABLE_NAME}
+        PROPERTIES
+            OUTPUT_NAME "${elf_name}"
+    )
+
+    # clean up
+    get_directory_property(clean_files ADDITIONAL_MAKE_CLEAN_FILES)
+    set_directory_properties(
+        PROPERTIES
+            ADDITIONAL_MAKE_CLEAN_FILES "${map_file}"
+    )
+
+    # send it
+    add_custom_target(
+        upload_${EXECUTABLE_NAME}
+        ${AVR_UPLOADTOOL} -p ${AVR_MCU} -c ${AVR_PROGRAMMER} ${AVR_UPLOADTOOL_OPTIONS} 
+            -U flash:w:${hex_file}
+            -P ${AVR_UPLOADTOOL_PORT}
+        DEPENDS ${hex_file}
+        COMMENT "Uploading ${hex_file} to ${AVR_MCU} using ${AVR_PROGRAMMER}"
+    )
+
+    # eeprom only
+    add_custom_target(
+        upload_eeprom
+        ${AVR_UPLOADTOOL} -p ${AVR_MCU} -c ${AVR_PROGRAMMER} ${AVR_UPLOADTOOL_OPTIONS}
+            -U eeprom:w:${eeprom_image}
+            -P ${AVR_UPLOADTOOL_PORT}
+        DEPENDS ${eeprom_image}
+        COMMENT "Uploading ${eeprom_image} to ${AVR_MCU} using ${AVR_PROGRAMMER}"
+    )
+
+    # status
+    add_custom_target(
+        get_status
+        ${AVR_UPLOADTOOL} -p ${AVR_MCU} -c ${AVR_PROGRAMMER} -P ${AVR_UPLOADTOOL_PORT} -n -v
+        COMMENT "Get status from ${AVR_MCU}"
+    )
+    
+    # fuses
+    add_custom_target(
+        get_fuses
+        ${AVR_UPLOADTOOL} -p ${AVR_MCU} -c ${AVR_PROGRAMMER} -P ${AVR_UPLOADTOOL_PORT} -n
+            -U lfuse:r:-:b
+            -U hfuse:r:-:b
+        COMMENT "Get fuses from ${AVR_MCU}"
+    )
+
+    # Still FE: Get oscillator calibration
+    add_custom_target(
+        get_calibration
+            ${AVR_UPLOADTOOL} -p ${AVR_MCU} -c ${AVR_PROGRAMMER} -P ${AVR_UPLOADTOOL_PORT}
+            -U calibration:r:${AVR_MCU}_calib.tmp:r
+            COMMENT "Program caibration status of internal oscillator from ${AVR_MCU}_calib.hex"
+    )
+
+    # Set oscillator calibration
+    add_custom_target(
+        set_calibration
+        ${AVR_UPLOADTOOL} -p ${AVR_MCU} -c ${AVR_PROGRAMMER} -P ${AVR_UPLOADTOOL_PORT}
+            -U calibration:w:${AVR_MCU}_calib.hex
+            COMMENT "Program calibration status of internal oscillator from ${AVR_MCU}_calib.hex."
+    )
+
+    # disassemble
+    add_custom_target(
+        dissasemble_${EXECUTABLE_NAME}
+        ${AVR_OBJDUMP} -h -S ${elf_file} > ${EXECUTABLE_NAME}.lst
+        DEPENDS ${elf_file}
+    )
+
+endfunction(add_avr_executable)
