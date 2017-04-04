@@ -18,7 +18,7 @@ set(AVR_L_FUSE 0xff)
 ############################################################
 #### Project title                                      ####
 ############################################################
-project(dumb_test)
+project(heartbeat)
 #### End project name                                   ####
 
 ############################################################
@@ -134,5 +134,5 @@ add_subdirectory(src)
 # still FE
 
 # use default documentation target
-set(DOXYGEN_CONF_IN "doxygen.conf")
-include("${PROJECT_SOURCE_DIR}/../Modules/defaultDocuTarget.cmake")
+#set(DOXYGEN_CONF_IN "doxygen.conf")
+#include("${PROJECT_SOURCE_DIR}/../Modules/defaultDocuTarget.cmake")

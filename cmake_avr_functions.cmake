@@ -44,14 +44,14 @@ function(add_avr_executable EXECUTABLE_NAME)
     set_target_properties(
         ${elf_file}
         PROPERTIES
-            COMPILE_FLAGS "-mcu=${AVR_MCU}, -m32"
-            LINK_FLAGS "-mmcu=${AVR_MCU} -Wl, -m32, --gc-sections -mrelax -Wl, -Map, ${map_file}"
+            COMPILE_FLAGS "-mmcu=${AVR_MCU}"
+            LINK_FLAGS "-mmcu=${AVR_MCU} -Wl,--gc-sections -mrelax -Wl,-Map,${map_file}"
     )
 
     add_custom_command(
         OUTPUT ${hex_file}
         COMMAND
-            ${AVR_OBJCOPY} -j .text -j .data ihex ${elf_file} ${hex_file}
+            ${AVR_OBJCOPY} -j .text -j .data -O ihex ${elf_file} ${hex_file}
         COMMAND
             ${AVR_SIZE_TOOL} ${AVR_SIZE_ARGS} ${elf_file}
         DEPENDS ${elf_file}
