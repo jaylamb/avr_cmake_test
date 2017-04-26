@@ -7,13 +7,13 @@ int main( void ){
 
     while (1) {
         PORTB= 0x20;
-        _delay_ms( 500 );
+        _delay_ms( 100 );
         PORTB= 0x00;
         _delay_ms( 100 );
         PORTB= 0x20;
-	_delay_ms( 500 );
+	_delay_ms( 300 );
 	PORTB= 0x00;
-	_delay_ms( 1000 );
+	_delay_ms( 1500 );
     }
 
     return( 0 ); 

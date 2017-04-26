@@ -3,6 +3,6 @@
 #################################
 
 add_avr_executable(
-	toggle-led
+	heartbeat
 	heartbeat.c
 )
