@@ -126,6 +126,7 @@ add_definitions("-std=gnu99")
 #building library and application in their subdirectories
 #add_subdirectory(mylib)
 add_subdirectory(src)
+#add_subdirectory(inc)
 
 #testing functions w/o source files - gets FATAL_ERROR
 # add_avr_executable(test_breaks_generation)
