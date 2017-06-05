@@ -1,7 +1,7 @@
 #include <stdint.h>
 #include <avr/io.h>
 
-void adc_init( uint8_t channel )
+void adc_init( void  )
 {
     ADCSRA |= (( 1 << ADPS2 ) | ( 1<<ADPS1 ) | ( 1 << ADPS0 ));
     ADMUX  |=  ( 1 << REFS0 );
