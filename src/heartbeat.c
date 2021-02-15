@@ -1,3 +1,4 @@
+#include <avr/interrupt.h>
 #include <avr/io.h> 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,7 +19,14 @@ uart_send_string( "UART Initialized.\n\r" );
 adc_init( );
 uart_send_string( "ADC Initialized on channel 0.\n\r" );
 
+sei();
+uart_send_string( "Interrupts Initialized\n\r" );
+
     DDRB |= (1 << PB5);
+    DDRD &= (0 << PD2);
+
+    EICRA |= (1<<ISC01)|(1<<ISC00); // enable receiver and transmitter
+    EIMSK |= (1<<INT0);             // 8 bit data format
 
     while (1) {
         PORTB= 0x20;
@@ -39,4 +47,8 @@ uart_send_string( "ADC Initialized on channel 0.\n\r" );
     }
 
     return( 0 ); 
+}
+
+ISR(INT0_vect){
+	uart_send_string( "WOWEE\n\r" );
 }
