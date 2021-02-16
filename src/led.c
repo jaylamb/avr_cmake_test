@@ -17,5 +17,4 @@ void led_blink( void ){
     PORTB= 0x20;
     _delay_ms( 300 );
     PORTB= 0x00;
-    _delay_ms( 4500 );
 }

@@ -51,6 +51,8 @@ sei();
 
         //adc_result = adc_read( 0 );
         //uart_send_string( strcat( itoa( adc_result, adc_string, 10 ), "\n\r" ));
+
+        _delay_ms( 2000 );
     }
 
 return( 0 ); 
