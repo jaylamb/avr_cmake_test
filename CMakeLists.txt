@@ -18,7 +18,7 @@ set(AVR_L_FUSE 0xff)
 ############################################################
 #### Project title                                      ####
 ############################################################
-project(heartbeat)
+project(avr_playland)
 #### End project name                                   ####
 
 ############################################################
@@ -47,7 +47,6 @@ endif(NOT CMAKE_BUILD_TYPE)
 set(MCU_SPEED "16000000UL")
 #### end set MCU clock frequency                       ####
 
-#### FROM EXAMPLE!!!
 ###########################################################
 #### "some cmake cross-compile necessities"            ####
 ###########################################################
@@ -71,15 +70,10 @@ set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)
 set(CMAKE_SYSTEM_INCLUDE_PATH "${CMAKE_FIND_ROOT_PATH}/include")
 set(CMAKE_SYSTEM_LIBRARY_PATH "${CMAKE_FIND_ROOT_PATH}/lib")
 
-#still FE
-
 #status messages for generating
-
 message(STATUS "Set CMAKE_FIND_ROOT_PATH to ${CMAKE_FIND_ROOT_PATH}")
 message(STATUS "Set CMAKE_SYSTEM_INCLUDE_PATH to ${CMAKE_SYSTEM_INCLUDE_PATH}")
 message(STATUS "Set CMAKE_SYSTEM_LIBRARY_PATH to ${CMAKE_SYSTME_LIBRARY_PATH}")
-
-#still FE
 
 # set compiler options for build types
 if(CMAKE_BUILD_TYPE MATCHES Release)
@@ -96,8 +90,6 @@ if(CMAKE_BUILD_TYPE MATCHES Debug)
     set(CMAKE_C_FLAGS_DEBUG "-O0 -save-temps -g -gdwarf-3 -gstrict-dwarf")
     set(CMAKE_CXX_FLAGS_DEBUG "-O0 -save-temps -g -gdwarf-3 -gstrict-dwarf")
 endif(CMAKE_BUILD_TYPE MATCHES Debug)
-
-#Still FE
 
 # compiler options for all build types
 add_definitions("-DF_CPU=${MCU_SPEED}")
@@ -118,22 +110,7 @@ add_definitions("-ffunction-sections")
 add_definitions("-c")
 add_definitions("-std=gnu99")
 
-#Still FE
-
 #include search paths
-#include_directories({$AVR-EXAMPLE_SOURCE_DIR}/mylib)
 
 #building library and application in their subdirectories
-#add_subdirectory(mylib)
 add_subdirectory(src)
-#add_subdirectory(inc)
-
-#testing functions w/o source files - gets FATAL_ERROR
-# add_avr_executable(test_breaks_generation)
-# add_avr_library(mytestlib_breaks_generation)
-
-# still FE
-
-# use default documentation target
-#set(DOXYGEN_CONF_IN "doxygen.conf")
-#include("${PROJECT_SOURCE_DIR}/../Modules/defaultDocuTarget.cmake")

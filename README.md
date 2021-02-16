@@ -7,6 +7,4 @@ To build:
 	cmake -DCMAKE_TOOLCHAIN_FILE=../cmake_avr_functions.cmake ..
 
 3) Make and deploy the executable:
-	make upload_heartbeat
-
-
+	make upload_avr_playland

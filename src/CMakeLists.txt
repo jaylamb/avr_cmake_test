@@ -3,8 +3,11 @@
 #################################
 
 add_avr_executable(
-	heartbeat
-	heartbeat.c
-	uart.c
+	avr_playland
+	avr_playland.c
+
 	adc.c
+	uart.c
+    led.c
+    tach.c
 )
